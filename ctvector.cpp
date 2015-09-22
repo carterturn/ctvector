@@ -20,6 +20,10 @@
 #include "ctvector.h"
 #include <cmath>
 
+#ifdef openblas
+#include <openblas/cblas.h>
+#endif
+
 // This function rotates a vector. It probably works.
 ctvector ctvector::rotate(float tx, float ty, float tz){
 	
@@ -79,14 +83,30 @@ ctvector ctvector::operator*(const float& scalar){
 }
 
 // Dot product
-ctvector ctvector::operator*=(const ctvector& param){
+float ctvector::operator*=(const ctvector& param){
+
+#ifdef openblas
+	float array[3];
+	float paramarray[3];
+
+	array[0] = x;
+	array[1] = y;
+	array[2] = z;
+
+	paramarray[0] = param.x;
+	paramarray[1] = param.y;
+	paramarray[2] = param.z;
+
+	return cblas_sdot(3, array, 1, paramarray, 1);
+#else
 	ctvector result;
 
 	result.x = x * param.x;
 	result.y = y * param.y;
 	result.z = z * param.z;
 
-	return result;
+	return result.x + result.y + result.z;
+#endif
 }
 
 // Cross (+) product

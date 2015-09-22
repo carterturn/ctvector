@@ -7,6 +7,10 @@ build: $(VECTOR)
 	$(CPP) -c -fPIC $(VECTOR)
 	$(CPP) -c -fPIC $(LINE)
 	$(CPP) -shared -Wl,-soname,libctvector.so -o libctvector.so *.o
+openblas: $(VECTOR)
+	$(CPP) -c -fPIC $(VECTOR) -Dopenblas -lopenblas
+	$(CPP) -c -fPIC $(LINE) -Dopenblas -lopenblas
+	$(CPP) -shared -Wl,-soname,libctvector.so -o libctvector.so *.o
 install:
 	mkdir /usr/include/ctvector
 	cp libctvector.so /usr/lib/
