@@ -68,12 +68,34 @@ ctvector ctvector::operator-(const ctvector& param){
 	return result;
 }
 
-ctvector ctvector::operator*(const int& scalar){
+ctvector ctvector::operator*(const float& scalar){
 	ctvector result;
 	
 	result.x = x*scalar;
 	result.y = y*scalar;
 	result.z = z*scalar;
 	
+	return result;
+}
+
+// Dot product
+ctvector ctvector::operator*=(const ctvector& param){
+	ctvector result;
+
+	result.x = x * param.x;
+	result.y = y * param.y;
+	result.z = z * param.z;
+
+	return result;
+}
+
+// Cross (+) product
+ctvector ctvector::operator+=(const ctvector& param){
+	ctvector result;
+
+	result.x = y*param.z - z*param.y;
+	result.y = z*param.x - x*param.z;
+	result.z = x*param.y - y*param.x;
+
 	return result;
 }
