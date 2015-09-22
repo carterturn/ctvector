@@ -43,6 +43,6 @@ public:
 	ctvector operator* (const float& scalar);
 
 	// Products (dot and cross)
-	ctvector operator*= (const ctvector& param);
+	float operator*= (const ctvector& param);
 	ctvector operator+= (const ctvector& param);
 };

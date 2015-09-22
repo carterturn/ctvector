@@ -79,7 +79,7 @@ ctvector ctvector::operator*(const float& scalar){
 }
 
 // Dot product
-ctvector ctvector::operator*=(const ctvector& param){
+float ctvector::operator*=(const ctvector& param){
 	ctvector result;
 
 	result.x = x * param.x;
