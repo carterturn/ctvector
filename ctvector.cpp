@@ -86,7 +86,7 @@ float ctvector::operator*=(const ctvector& param){
 	result.y = y * param.y;
 	result.z = z * param.z;
 
-	return result;
+	return result.x + result.y + result.z;
 }
 
 // Cross (+) product
