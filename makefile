@@ -8,12 +8,15 @@ build: $(VECTOR)
 	$(CPP) -c -fPIC $(LINE)
 	$(CPP) -shared -Wl,-soname,libctvector.so -o libctvector.so *.o
 install:
-	mkdir /usr/include/ctvector
-	cp libctvector.so /usr/lib/
-	cp ctvector.h /usr/include/ctvector/
-	cp ctline.h /usr/include/ctvector/
+	[ -d /usr/include/ctvector ] || mkdir /usr/include/ctvector
+	cp -f libctvector.so /usr/lib/
+	cp -f ctvector.h /usr/include/ctvector/
+	cp -f ctline.h /usr/include/ctvector/
 uninstall:
-	rm /usr/lib/libctvector.so
-	rm -r /usr/include/ctvector
+	rm -f /usr/lib/libctvector.so
+	[ -d /usr/include/ctvector ] && rm /usr/include/ctvector/*.h
+	[ -d /usr/include/ctvector ] && rmdir /usr/include/ctvector
 clean:
-	rm *.o *.so *.gch
+	for file in $$(ls *.o); do rm $$file; done
+	for file in $$(ls *.so); do rm $$file; done
+	for file in $$(ls *.gch); do rm $$file; done

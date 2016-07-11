@@ -1,5 +1,5 @@
 /*
-  Copyright 2015 Carter Turnbaugh
+  Copyright 2016 Carter Turnbaugh
 
   This file is part of Terca C++ Vector.
 
@@ -20,15 +20,29 @@
 #include "ctvector.h"
 #include <cmath>
 
+#ifdef GRAPHICS
+#include <GL/glut.h>
+#endif
+
+std::string ctvector::to_string(){
+	std::stringstream stream;
+#ifdef GMP
+	stream << x.get_d() << " " << y.get_d() << " " << z.get_d();
+#else
+	stream << x << " " << y << " " << z;
+#endif
+	return stream.str();
+}
+
 // This function rotates a vector. It probably works.
-ctvector ctvector::rotate(float tx, float ty, float tz){
+ctvector ctvector::rotate(double tx, double ty, double tz){
 	
 	ctvector xrot(0.0f, 0.0f, 0.0f);
 	//First, x rotation
 	xrot.x = x;
 	xrot.y = y*cos(tx) - z*sin(tx);
 	xrot.z = y*sin(tx) + z*cos(tx);
-	
+
 	ctvector yrot(0.0f, 0.0f, 0.0f);
 	//Then, y rotation
 	yrot.x = xrot.x*cos(ty) + xrot.z*sin(ty);
@@ -68,6 +82,49 @@ ctvector ctvector::operator-(const ctvector& param){
 	return result;
 }
 
+// Dot product
+#ifdef GMP
+mpf_class ctvector::operator*=(const ctvector& param){
+	ctvector result;
+
+	result.x = x * param.x;
+	result.y = y * param.y;
+	result.z = z * param.z;
+
+	return result.x + result.y + result.z;
+}
+#else
+double ctvector::operator*=(const ctvector& param){
+	ctvector result;
+
+	result.x = x * param.x;
+	result.y = y * param.y;
+	result.z = z * param.z;
+
+	return result.x + result.y + result.z;
+}
+#endif
+
+ctvector ctvector::operator*(const int& scalar){
+	ctvector result;
+	
+	result.x = x*scalar;
+	result.y = y*scalar;
+	result.z = z*scalar;
+	
+	return result;
+}
+
+ctvector ctvector::operator*(const double& scalar){
+	ctvector result;
+	
+	result.x = x*scalar;
+	result.y = y*scalar;
+	result.z = z*scalar;
+	
+	return result;
+}
+
 ctvector ctvector::operator*(const float& scalar){
 	ctvector result;
 	
@@ -78,16 +135,17 @@ ctvector ctvector::operator*(const float& scalar){
 	return result;
 }
 
-// Dot product
-float ctvector::operator*=(const ctvector& param){
+#ifdef GMP
+ctvector ctvector::operator*(const mpf_class& scalar){
 	ctvector result;
-
-	result.x = x * param.x;
-	result.y = y * param.y;
-	result.z = z * param.z;
-
-	return result.x + result.y + result.z;
+	
+	result.x = x*scalar;
+	result.y = y*scalar;
+	result.z = z*scalar;
+	
+	return result;
 }
+#endif
 
 // Cross (+) product
 ctvector ctvector::operator+=(const ctvector& param){
@@ -99,3 +157,43 @@ ctvector ctvector::operator+=(const ctvector& param){
 
 	return result;
 }
+
+#ifdef GMP
+mpf_class ctvector::abs(){
+#else
+double ctvector::abs(){
+#endif
+	return sqrt(x*x + y*y + z*z);
+}
+
+#ifdef GMP
+mpf_class abs(ctvector input){
+#else
+double abs(ctvector input){
+#endif
+        return input.abs();
+}
+
+#ifdef GRAPHICS
+#ifdef GMP
+void ctvector::draw(ctvector in){
+	glVertex3f(in.x.get_d(), in.y.get_d(), in.z.get_d());
+}
+void ctvector::draw(){
+	glVertex3f(x.get_d(), y.get_d(), z.get_d());
+}
+void glvdraw(ctvector in){
+	glVertex3f(in.x.get_d(), in.y.get_d(), in.z.get_d());
+}
+#else
+void ctvector::draw(ctvector in){
+	glVertex3f(in.x, in.y, in.z);
+}
+void ctvector::draw(){
+	glVertex3f(x, y, z);
+}
+void glvdraw(ctvector in){
+	glVertex3f(in.x, in.y, in.z);
+}
+#endif
+#endif

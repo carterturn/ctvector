@@ -1,5 +1,5 @@
 /*
-  Copyright 2015 Carter Turnbaugh
+  Copyright 2016 Carter Turnbaugh
 
   This file is part of Terca C++ Vector.
 
@@ -31,6 +31,6 @@ public:
 	ctvector point1;
 	ctvector point2;
 
-	ctline rotate(float tx, float ty, float tz);
+	ctline rotate(double tx, double ty, double tz);
 
 };

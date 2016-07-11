@@ -1,5 +1,5 @@
 /*
-  Copyright 2015 Carter Turnbaugh
+  Copyright 2016 Carter Turnbaugh
 
   This file is part of Terca C++ Vector.
 
@@ -19,7 +19,7 @@
 
 #include "ctline.h"
 
-ctline ctline::rotate(float tx, float ty, float tz){
+ctline ctline::rotate(double tx, double ty, double tz){
 
 	point1.rotate(tx, ty, tz);
 	point2.rotate(tx, ty, tz);

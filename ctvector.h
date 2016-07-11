@@ -1,5 +1,5 @@
 /*
-  Copyright 2015 Carter Turnbaugh
+  Copyright 2016 Carter Turnbaugh
 
   This file is part of Terca C++ Vector.
 
@@ -19,30 +19,84 @@
 
 #pragma once
 
+#define GMP
+#define GRAPHICS
+
+#include <sstream>
+#ifdef GMP
+#include <gmpxx.h>
+#endif
+
 class ctvector{
 public:
+#ifdef GMP
+	ctvector(mpf_class ctvx, mpf_class ctvy, mpf_class ctvz){
+#else
 	ctvector(float ctvx, float ctvy, float ctvz){
+#endif
 		x = ctvx;
 		y = ctvy;
 		z = ctvz;
 	}
+	
 	ctvector(){
 		x = 0.0f;
 		y = 0.0f;
 		z = 0.0f;
 	}
-	
+
+	std::string to_string();
+
+	// Proximity definition results in functioning as an array
+	// i.e. &x[0] == x, &x[1] == y, &x[2] == z
+#ifdef GMP
+        mpf_class x;
+        mpf_class y;
+        mpf_class z;
+#else
 	float x;
 	float y;
 	float z;
+#endif	
 	
-	ctvector rotate(float tx, float ty, float tz);
+	ctvector rotate(double tx, double ty, double tz);
 	
 	ctvector operator+ (const ctvector& param);
 	ctvector operator- (const ctvector& param);
-	ctvector operator* (const float& scalar);
-
+#ifdef GMP
+	mpf_class operator*= (const ctvector& param);	
+#else
+	double operator*= (const ctvector& param);
+#endif
+	
+        ctvector operator* (const int& scalar);
+        ctvector operator* (const double& scalar);
+        ctvector operator* (const float& scalar);
+#ifdef GMP
+        ctvector operator* (const mpf_class& scalar);
+#endif
+	
 	// Products (dot and cross)
-	float operator*= (const ctvector& param);
 	ctvector operator+= (const ctvector& param);
+
+#ifdef GMP
+	mpf_class abs();
+#else
+	double abs();
+#endif
+	
+#ifdef GRAPHICS
+        void draw(ctvector in);
+        void draw();
+#endif
 };
+
+#ifdef GMP
+mpf_class abs(ctvector input);
+#else
+double abs(ctvector input);
+#endif
+
+#ifdef GRAPHICS
+void gldraw(ctvector in);
+#endif
